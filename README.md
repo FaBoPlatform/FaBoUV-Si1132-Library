@@ -5,7 +5,7 @@
 
 This is a library for FaBo UV Brick.
 
-# ISL29034
+# Si1132
 
 Si1132 is SiliconLab's mems sensor for UV.
 
