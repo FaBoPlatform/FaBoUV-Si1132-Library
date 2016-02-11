@@ -7,13 +7,15 @@
 #include <Wire.h>
 #include "fabo-si1132.h"
 
+FaBoUV faboUV;
+
 void setup()
 {
   Serial.begin(115200); // シリアルの開始デバック用
    
   Serial.println("Checking I2C device...");
   
-  if(faboUV.SearchDevice()){
+  if(faboUV.searchDevice()){
     Serial.println("I am Si1132");
     faboUV.reset();
     faboUV.configuration();

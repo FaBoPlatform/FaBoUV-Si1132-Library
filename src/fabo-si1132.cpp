@@ -1,18 +1,18 @@
 #include "fabo-si1132.h"
 
-bool si1132::searchDevice()
+bool FaBoUV::searchDevice()
 {
   byte device = 0x00;
   readI2c(SI1132_PART_ID_REG, 1, &device);
 
   if(device == SI1132_DEVICE){
-      return true;
+    return true;
   } else{
-      return false;
+    return false;
   }
 }
 
-void si1132::configuration()
+void FaBoUV::configuration()
 {
   writeI2c(SI1132_UCOEF0_REG, 0x7B);
   writeI2c(SI1132_UCOEF1_REG, 0x6B);
@@ -23,7 +23,7 @@ void si1132::configuration()
   writeI2c(SI1132_CHIPLIST_REG, enable_sensor);
 
   // Rateの設定
-  writeI2c(Si1132_MEASRATE0_REG, 0xff);
+  writeI2c(SI1132_MEASRATE0_REG, 0xff);
 
   int flag_als_encoding = SI1132_ALS_VIS_ALIGN | SI1132_ALS_IR_ALIGN;
   writeI2c(SI1132_ALS_ENCODING_REG, flag_als_encoding);
@@ -50,12 +50,12 @@ void si1132::configuration()
   writeI2c(SI1132_COMMAND_REG, SI1132_COMMAND_ALS_AUTO);
 }
 
-void si1132::reset()
+void FaBoUV::reset()
 {
   writeI2c(SI1132_COMMAND_REG, SI1132_COMMAND_RESET);
 }
 
-uint16_t si1132::readUV()
+uint16_t FaBoUV::readUV()
 {
   uint16_t uv_index;
   uint8_t buffer[2];
@@ -66,7 +66,7 @@ uint16_t si1132::readUV()
   return uv_index;
 }
 
-uint16_t si1132::readIR()
+uint16_t FaBoUV::readIR()
 {
   uint16_t ir;
   uint8_t buffer[2];
@@ -78,7 +78,7 @@ uint16_t si1132::readIR()
 }
 
 
-uint16_t si1132::readVisible()
+uint16_t FaBoUV::readVisible()
 {
   uint16_t visible;
   uint8_t buffer[2];
@@ -90,21 +90,21 @@ uint16_t si1132::readVisible()
 }
 
 // I2Cへの書き込み
-void si1132::writeI2c(byte register_addr, byte value) {
-  Wire.beginTransmission(si1132_SLAVE_ADDRESS);  
+void FaBoUV::writeI2c(byte register_addr, byte value) {
+  Wire.beginTransmission(SI1132_SLAVE_ADDRESS);  
   Wire.write(register_addr);         
   Wire.write(value);                 
   Wire.endTransmission();        
 }
 
 // I2Cへの読み込み
-void si1132::readI2c(byte register_addr, int num, byte *buf) {
-  Wire.beginTransmission(si1132_SLAVE_ADDRESS); 
+void FaBoUV::readI2c(byte register_addr, int num, byte *buf) {
+  Wire.beginTransmission(SI1132_SLAVE_ADDRESS); 
   Wire.write(register_addr);           
   Wire.endTransmission(false);         
 
   //Wire.beginTransmission(DEVICE_ADDR); 
-  Wire.requestFrom(si1132_SLAVE_ADDRESS, num);  
+  Wire.requestFrom(SI1132_SLAVE_ADDRESS, num);  
 
   int i = 0;
   while (Wire.available())
@@ -114,7 +114,4 @@ void si1132::readI2c(byte register_addr, int num, byte *buf) {
   }
   //Wire.endTransmission();         
 }
-
-
-si1132 faboUV;
 

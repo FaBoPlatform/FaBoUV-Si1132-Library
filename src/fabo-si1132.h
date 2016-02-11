@@ -1,6 +1,9 @@
 #include "Arduino.h"
 #include "Wire.h"
 
+#define SI1132_SLAVE_ADDRESS 0x60
+#define SI1132_DEVICE 0x32
+
 // Register address
 #define SI1132_PART_ID_REG 0x00
 #define SI1132_UCOEF0_REG 0x13
@@ -29,7 +32,7 @@
 #define SI1132_EN_ALS_VIS 0b00010000
 
 #define SI1132_ALS_VIS_ALIGN 0b00010000
-#define SI1132_ALS_VIS_ALIGN 0b00100000
+#define SI1132_ALS_IR_ALIGN 0b00100000
 
 #define SI1132_1_ADC_CLOCK 0b00000000
 #define SI1132_7_ADC_CLOCK 0b00010000
@@ -56,18 +59,16 @@
 #define SI1132_COMMAND_RESET 0x01
 
 
-class si1132
+class FaBoUV
 {
 public:
-  uint16_t readUV(void);
-  uint16_t readIR(void);
-  uint16_t readVisible(void);
-  void reset(void);
-  void configuration(void);
-  bool searchDevice(void);
+	uint16_t readUV(void);
+	uint16_t readIR(void);
+	uint16_t readVisible(void);
+	void reset(void);
+	void configuration(void);
+	bool searchDevice(void);
 private:
-  void readI2c(byte register_addr, int num, byte *buf);
-  void writeI2c(byte register_addr, byte value);
+	void readI2c(byte register_addr, int num, byte *buf);
+	void writeI2c(byte register_addr, byte value);
 };
-
-extern si1132 faboUV;
