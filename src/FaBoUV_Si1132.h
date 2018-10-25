@@ -1,9 +1,19 @@
 /**
- * @file  fabo-si1132.h
- * @brief fabo libtary of SI1132
- * @author Akira Sasaki
- * @date 2,10, 2016
- */
+@file FaBoUV_Si1132.cpp
+@brief This is a library for the FaBo UV I2C Brick.
+
+  http://fabo.io/206.html
+
+  Released under APACHE LICENSE, VERSION 2.0
+
+  http://www.apache.org/licenses/
+
+@author FaBo<info@fabo.io>
+*/
+
+#ifndef FABOUV_SI1132_H
+#define FABOUV_SI1132_H
+
 #include "Arduino.h"
 #include "Wire.h"
 
@@ -14,6 +24,10 @@
 /** Device check register */
 #define SI1132_DEVICE 0x32
 
+/** HW_KEY register */
+#define SI1132_HW_KEY_REG 0x07
+/** MEASRATE0 register */
+#define SI1132_MEASRATE0_REG 0x08
 /** UCOEF0 register */
 #define SI1132_UCOEF0_REG 0x13
 /** UCOEF1 register */
@@ -22,53 +36,51 @@
 #define SI1132_UCOEF2_REG 0x15
 /** UCOEF3 register */
 #define SI1132_UCOEF3_REG 0x16
-
-/** Chip list register */
-#define SI1132_CHIPLIST_REG 0x01
-/** MEASRATE0 register */
-#define SI1132_MEASRATE0_REG 0x08
-/** ALS Encoding register */
-#define SI1132_ALS_ENCODING_REG 0x06
-/** ALS VIS ADC Counter register */
-#define SI1132_ALS_VIS_ADC_COUNTER_REG 0x10
-/** ALS VIS ADC Gain register */
-#define SI1132_ALS_VIS_ADC_GAIN_REG 0x11
-/** ALS VIS ADC Misc register */
-#define SI1132_ALS_VIS_ADC_MISC_REG 0x12
-
-/** ALS IR ADC Counter register */
-#define SI1132_ALS_IR_ADC_COUNTER_REG 0x1D
-/** ALS IR ADC Gain register */
-#define SI1132_ALS_IR_ADC_GAIN_REG 0x1E
-/** ALS IR ADC Misc register */
-#define SI1132_ALS_IR_ADC_MISC_REG 0x1F
-/** ALS IR Adcmux register */
-#define SI1132_ALS_IR_ADCMUX_REG 0x0E
-/** Auxiliary Adcmux register */
-#define SI1132_AUX_ADCMUX_REG 0x0F
+/** PARAM_WR register */
+#define SI1132_PARAM_WR_REG 0x17
 /** Command register */
 #define SI1132_COMMAND_REG 0x18
-/** Auxiliary Data register */
-#define SI1132_AUX_DATA_REG 0x2C
-/** IR Data register */
-#define SI1132_IR_DATA_REG 0x24
 /** Visible Data register */
 #define SI1132_VISIBLE_DATA_REG 0x22
+/** IR Data register */
+#define SI1132_IR_DATA_REG 0x24
+/** Auxiliary Data register */
+#define SI1132_AUX_DATA_REG 0x2C
 
+/** Chip list Parameter RAM Offset */
+#define SI1132_CHIPLIST_PARAM_OFFSET 0x01
+/** ALS Encoding Parameter RAM Offset */
+#define SI1132_ALS_ENCODING_PARAM_OFFSET 0x06
+/** ALS VIS ADC Counter register */
+#define SI1132_ALS_VIS_ADC_COUNTER_PARAM_OFFSET 0x10
+/** ALS VIS ADC Gain Parameter RAM Offset */
+#define SI1132_ALS_VIS_ADC_GAIN_PARAM_OFFSET 0x11
+/** ALS VIS ADC Misc Parameter RAM Offset */
+#define SI1132_ALS_VIS_ADC_MISC_PARAM_OFFSET 0x12
+/** ALS IR ADC Counter  Parameter RAM Offset */
+#define SI1132_ALS_IR_ADC_COUNTER_PARAM_OFFSET 0x1D
+/** ALS IR ADC Gain  Parameter RAM Offset */
+#define SI1132_ALS_IR_ADC_GAIN_PARAM_OFFSET 0x1E
+/** ALS IR ADC Misc  Parameter RAM Offset */
+#define SI1132_ALS_IR_ADC_MISC_PARAM_OFFSET 0x1F
+/** ALS IR Adcmux  Parameter RAM Offset */
+#define SI1132_ALS_IR_ADCMUX_PARAM_OFFSET 0x0E
+/** Auxiliary Adcmux  Parameter RAM Offset */
+#define SI1132_AUX_ADCMUX_PARAM_OFFSET 0x0F
 
 /** Enables UV Index register */
-#define SI1132_EN_UV 0b10000000
+#define SI1132_EN_UV      0b10000000
 /** Enables Auxiliary Channel register */
-#define SI1132_EN_AUX 0b01000000
+#define SI1132_EN_AUX     0b01000000
 /** Enables ALS IR Channel register */
-#define SI1132_EN_ALS_IR 0b00100000
+#define SI1132_EN_ALS_IR  0b00100000
 /** Enables ALS Visible Channel register */
 #define SI1132_EN_ALS_VIS 0b00010000
 
 /** ALS　VIS ALIGN register */
 #define SI1132_ALS_VIS_ALIGN 0b00010000
 /** ALS　IR ALIGN register */
-#define SI1132_ALS_IR_ALIGN 0b00100000
+#define SI1132_ALS_IR_ALIGN  0b00100000
 
 /** ADC Clock 1 : 50 ns times */
 #define SI1132_1_ADC_CLOCK   0b00000000
@@ -88,7 +100,7 @@
 #define SI1132_511_ADC_CLOCK 0b01110000
 
 /** Divided ADC Clock 1 */
-#define SI1132_1_DIVIDED_ADC_CLOCK 0b0000000
+#define SI1132_1_DIVIDED_ADC_CLOCK  0b0000000
 /** Divided ADC Clock 16 */
 #define SI1132_16_DEVIDED_ADC_CLOCK 0b0000100
 /** Divided ADC Clock 64 */
@@ -97,7 +109,7 @@
 /** Normal single range */
 #define SI1132_NORMAL_SIGNAL_RANGE 0b00000000
 /** High single range */
-#define SI1132_HIGH_SIGNAL_RANGE 0b00100000
+#define SI1132_HIGH_SIGNAL_RANGE   0b00100000
 
 /** ALS IR Adcmux SMALLIR */
 #define SI1132_ALS_IR_ADCMUX_SMALLIR 0x00
@@ -111,6 +123,14 @@
 #define SI1132_COMMAND_ALS_AUTO 0x0E
 /** Command Reset */
 #define SI1132_COMMAND_RESET 0x01
+/** HW_KEY Default Value */
+#define SI1132_HW_KEY_DEFAULT 0x17
+
+/** Normal single range */
+#define SI1132_PARAM_QUERY 0b10000000
+/** High single range */
+#define SI1132_PARAM_SET   0b10100000
+
 
 /**
  * @class FaBoUV
@@ -119,6 +139,8 @@
 class FaBoUV
 {
 public:
+	FaBoUV(uint8_t addr = SI1132_SLAVE_ADDRESS);
+	bool begin(void);
 	bool searchDevice(void);
 	void configuration(void);
 	void reset(void);
@@ -126,6 +148,9 @@ public:
 	uint16_t readIR(void);
 	uint16_t readVisible(void);
 private:
-	void writeI2c(byte register_addr, byte value);
-	void readI2c(byte register_addr, int num, byte *buf);
+	uint8_t _i2caddr;
+	void writeI2c(uint8_t register_addr, uint8_t value);
+	void readI2c(uint8_t register_addr, int num, uint8_t *buf);
 };
+
+#endif

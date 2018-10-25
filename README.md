@@ -16,6 +16,7 @@ Si1132 is SiliconLab's mems sensor for UV.
 # Releases
 
 1.0.0 Initial release.
+1.0.1 minimal fix.
 
 # How to install.
 
