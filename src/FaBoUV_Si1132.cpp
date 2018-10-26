@@ -193,7 +193,7 @@ void FaBoUV::writeI2c(uint8_t register_addr, uint8_t value) {
 void FaBoUV::readI2c(uint8_t register_addr, int num, uint8_t *buf) {
   Wire.beginTransmission(_i2caddr);
   Wire.write(register_addr);
-  Wire.endTransmission(false);
+  Wire.endTransmission();
 
   //Wire.beginTransmission(DEVICE_ADDR);
   Wire.requestFrom(_i2caddr, num);
