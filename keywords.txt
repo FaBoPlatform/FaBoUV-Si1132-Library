@@ -15,7 +15,6 @@ FaBoUV	KEYWORD1
 searchDevice	KEYWORD2
 configuration	KEYWORD2
 reset	KEYWORD2
-
 readUV	KEYWORD2
 readIR	KEYWORD2
 readVisible	KEYWORD2
