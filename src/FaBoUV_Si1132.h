@@ -133,9 +133,9 @@
 
 
 /**
- * @class FaBoUV
- * @brief si1132 Control
- */
+ @class FaBoUV
+ @brief Si1132 Control
+*/
 class FaBoUV
 {
 public:

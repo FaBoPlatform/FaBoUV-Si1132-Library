@@ -22,10 +22,10 @@ FaBoUV::FaBoUV(uint8_t addr){
 }
 
 /**
- * @brief Init si1132
- * @retval true  : Success
- * @retval false : Failed
- */
+ @brief Begin Device
+ @retval true normaly done
+ @retval false device error
+*/
 bool FaBoUV::begin()
 {
   if(searchDevice()){
@@ -38,10 +38,10 @@ bool FaBoUV::begin()
 }
 
 /**
- * @brief Serch si1132
- * @retval true  : Found
- * @retval false : Not Found
- */
+ @brief Search Device
+ @retval true device connected
+ @retval false device error
+*/
 bool FaBoUV::searchDevice()
 {
   uint8_t device = 0x00;
@@ -55,8 +55,8 @@ bool FaBoUV::searchDevice()
 }
 
 /**
- * @brief Set Config
- */
+ @brief Set Config
+*/
 void FaBoUV::configuration()
 {
   writeI2c(SI1132_UCOEF0_REG, 0x7B);
@@ -119,17 +119,17 @@ void FaBoUV::configuration()
 }
 
 /**
- * @brief Reset Si1132
- */
+ @brief software reset Si1132
+*/
 void FaBoUV::reset()
 {
   writeI2c(SI1132_COMMAND_REG, SI1132_COMMAND_RESET);
 }
 
 /**
- * @brief Read UV
- * @return uint16_t : uv data
- */
+ @brief Read UV
+ @param [out] uv rawdata (rawdata/100 -> UV INDEX)
+*/
 uint16_t FaBoUV::readUV()
 {
   uint16_t uv_index;
@@ -142,9 +142,9 @@ uint16_t FaBoUV::readUV()
 }
 
 /**
- * @brief Read IR
- * @return uint16_t : IR data
- */
+ @brief Read IR
+ @param [out] IR data (lux)
+*/
 uint16_t FaBoUV::readIR()
 {
   uint16_t ir;
@@ -158,9 +158,9 @@ uint16_t FaBoUV::readIR()
 
 
 /**
- * @brief Read Visible
- * @return uint16_t : Visible data
- */
+ @brief Read Visible
+ @param [out] Visible data (lux)
+*/
 uint16_t FaBoUV::readVisible()
 {
   uint16_t visible;
@@ -173,10 +173,10 @@ uint16_t FaBoUV::readVisible()
 }
 
 /**
- * @brief Write I2C Data
- * @param [in] register_addr : Write Register Address
- * @param [in] value  : Write Data
- */
+ @brief Write I2C Data
+ @param [in] register_addr Write Register Address
+ @param [in] value Write Data
+*/
 void FaBoUV::writeI2c(uint8_t register_addr, uint8_t value) {
   Wire.beginTransmission(_i2caddr);
   Wire.write(register_addr);
@@ -185,17 +185,15 @@ void FaBoUV::writeI2c(uint8_t register_addr, uint8_t value) {
 }
 
 /**
- * @brief Read I2C Data
- * @param [in] register_addr : register address
- * @param [in] num   : Data Length
- * @param [out] *buf : Read Data
- */
+ @brief Read I2C Data
+ @param [in] register_addr register address
+ @param [in] num Data Length
+ @param [out] *buf Read Data
+*/
 void FaBoUV::readI2c(uint8_t register_addr, int num, uint8_t *buf) {
   Wire.beginTransmission(_i2caddr);
   Wire.write(register_addr);
   Wire.endTransmission();
-
-  //Wire.beginTransmission(DEVICE_ADDR);
   Wire.requestFrom(_i2caddr, num);
 
   int i = 0;
@@ -204,5 +202,4 @@ void FaBoUV::readI2c(uint8_t register_addr, int num, uint8_t *buf) {
     buf[i] = Wire.read();
     i++;
   }
-  //Wire.endTransmission();
 }

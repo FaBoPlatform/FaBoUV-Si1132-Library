@@ -32,16 +32,19 @@ void setup()
 
 void loop()
 { 
-  double uvindex = faboUV.readUV();
-  double ir = faboUV.readIR();
-  double visible = faboUV.readVisible();
+  int uv_rawdata = faboUV.readUV();
+  int uv_index = uv_rawdata / 100;
+  int ir = faboUV.readIR();
+  int visible = faboUV.readVisible();
   
-  Serial.print("UV:");
-  Serial.println(uvindex);
+  Serial.print("UV_INDEX:");
+  Serial.println(uv_index);
   Serial.print("IR:");
-  Serial.println(ir);
+  Serial.print(ir);
+  Serial.println(" lux");
   Serial.print("Visible:");
-  Serial.println(visible);
+  Serial.print(visible);
+  Serial.println(" lux");
   Serial.println("");
   
   delay(1000);
