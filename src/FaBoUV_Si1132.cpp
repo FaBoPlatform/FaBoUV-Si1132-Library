@@ -59,6 +59,9 @@ bool FaBoUV::searchDevice()
 */
 void FaBoUV::configuration()
 {
+  // Reset
+  writeI2c(0x22, 0x01);
+  delay(100);
   writeI2c(SI1132_UCOEF0_REG, 0x7B);
   writeI2c(SI1132_UCOEF1_REG, 0x6B);
   writeI2c(SI1132_UCOEF2_REG, 0x01);
@@ -111,6 +114,7 @@ void FaBoUV::configuration()
 
   // SET AUX_ADCMUX
   writeI2c(SI1132_PARAM_WR_REG, SI1132_AUX_ADCMUX_TEMPERATURE);
+  //writeI2c(SI1132_PARAM_WR_REG, SI1132_AUX_ADCMUX_VDD);
   writeI2c(SI1132_COMMAND_REG, SI1132_PARAM_SET|SI1132_AUX_ADCMUX_PARAM_OFFSET);
 
   // COMMAND
@@ -137,8 +141,9 @@ uint16_t FaBoUV::readUV()
 
   readI2c(SI1132_AUX_DATA_REG, 2, buffer);
   uv_index = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
-
-  return uv_index;
+  Serial.println(uv_index);
+  uint16_t uv = uv_index/100;
+  return uv;
 }
 
 /**
@@ -152,7 +157,7 @@ uint16_t FaBoUV::readIR()
 
   readI2c(SI1132_IR_DATA_REG, 2, buffer);
   ir = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
-
+  ir = ((ir - 250)/2.44) * 14.5;
   return ir;
 }
 
@@ -168,7 +173,7 @@ uint16_t FaBoUV::readVisible()
 
   readI2c(SI1132_VISIBLE_DATA_REG, 2, buffer);
   visible = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
-
+  visible= ((visible -256)/0.282) * 14.5;
   return visible;
 }
 
