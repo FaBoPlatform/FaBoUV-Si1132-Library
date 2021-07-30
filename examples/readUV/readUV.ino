@@ -33,7 +33,7 @@ void setup()
 void loop()
 { 
   int uv_rawdata = faboUV.readUVraw();
-  float uv_index = uv_rawdata / 100;
+  float uv_index = uv_rawdata / 100.;
   int ir = faboUV.readIR();
   int visible = faboUV.readVisible();
   
