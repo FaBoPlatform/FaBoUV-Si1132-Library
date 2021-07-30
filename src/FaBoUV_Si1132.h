@@ -144,6 +144,7 @@ public:
 	bool searchDevice(void);
 	void configuration(void);
 	void reset(void);
+	uint16_t readUVraw(void);
 	uint16_t readUV(void);
 	uint16_t readIR(void);
 	uint16_t readVisible(void);
