@@ -68,7 +68,7 @@ void FaBoUV::configuration()
   writeI2c(SI1132_UCOEF3_REG, 0x00);
 
   // SET PARAM_WR(Chiplist)
-  writeI2c(SI1132_PARAM_WR_REG, SI1132_EN_UV|SI1132_EN_AUX|SI1132_EN_ALS_IR|SI1132_EN_ALS_VIS);
+  writeI2c(SI1132_PARAM_WR_REG, SI1132_EN_UV|SI1132_EN_ALS_IR|SI1132_EN_ALS_VIS);
   // COMMAND(Set Chiplist)
   writeI2c(SI1132_COMMAND_REG, SI1132_PARAM_SET|SI1132_CHIPLIST_PARAM_OFFSET);
 
@@ -131,18 +131,25 @@ void FaBoUV::reset()
 }
 
 /**
+ @brief Read UV raw
+ @param [out] uv rawdata
+*/
+uint16_t FaBoUV::readUVraw()
+{
+  uint8_t buffer[2];
+
+  readI2c(SI1132_AUX_DATA_REG, 2, buffer);
+  uint16_t uv = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
+  return uv;
+}
+
+/**
  @brief Read UV
  @param [out] uv rawdata (rawdata/100 -> UV INDEX)
 */
 uint16_t FaBoUV::readUV()
 {
-  uint16_t uv_index;
-  uint8_t buffer[2];
-
-  readI2c(SI1132_AUX_DATA_REG, 2, buffer);
-  uv_index = (((uint16_t)buffer[1])<<8) | (uint16_t)buffer[0];
-  Serial.println(uv_index);
-  uint16_t uv = uv_index/100;
+  uint16_t uv = readUVraw()/100;
   return uv;
 }
 
